@@ -5,9 +5,26 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: lightgray;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.toDoContainer {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  padding: 2rem;
+  border: solid 1px lightgray;
+  width: 50vw;
+  height: 100vh;
+  background-color: white;
+  box-shadow: 0 10px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%) !important
+}
+
+.form {
+  display: block;
 }
