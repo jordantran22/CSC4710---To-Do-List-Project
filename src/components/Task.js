@@ -47,7 +47,7 @@ const Task = ({task, deleteTask, getTasks}) => {
 
                 <div className="taskAttributes">
                     <div className="attributeKey">Category: </div>
-                    <div className="attributeValue">{task.category_name}</div>
+                    <div className="attributeValue">{task.category_name ? task.category_name : <div>None</div>}</div>
                 </div>
 
 

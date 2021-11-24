@@ -5,7 +5,7 @@ const connection = mysql.createConnection({
     host: "localhost",
     user: "jordan",
     database: "todo",
-    port: "3306"
+    port: "3306",
 });
 
 connection.connect((err) => {
@@ -23,7 +23,7 @@ class DbService {
     async getTasks() {
         try {
             const response = await new Promise((resolve, reject) => {
-                const query = "SELECT task_id, task_text, DATE_FORMAT(due_date, '%Y-%m-%d') AS due_date, priority_level, category_name, status FROM tasks JOIN category ON tasks.category_id = category.category_id ORDER BY tasks.priority_level ASC;";
+                const query = "SELECT task_id, task_text, DATE_FORMAT(due_date, '%Y-%m-%d') AS due_date, priority_level, category_name, status FROM tasks LEFT JOIN category ON tasks.category_id = category.category_id ORDER BY tasks.priority_level ASC;";
                 connection.query(query, (err, results) => {
                     if(err) reject(new Error(err.message));
                     resolve(results);
@@ -40,7 +40,7 @@ class DbService {
     async getTasksDueTommorow() {
         try {
             const response = await new Promise((resolve, reject) => {
-                const query = "SELECT task_id, task_text, DATE_FORMAT(due_date, '%Y-%m-%d') AS due_date, priority_level, category_name, status FROM tasks JOIN category ON tasks.category_id = category.category_id WHERE tasks.due_date = CURDATE() + INTERVAL 1 DAY ORDER BY tasks.priority_level ASC;";
+                const query = "SELECT task_id, task_text, DATE_FORMAT(due_date, '%Y-%m-%d') AS due_date, priority_level, category_name, status FROM tasks LEFT JOIN category ON tasks.category_id = category.category_id WHERE tasks.due_date = CURDATE() + INTERVAL 1 DAY ORDER BY tasks.priority_level ASC;";
                 connection.query(query, (err, results) => {
                     if(err) reject(new Error(err.message));
                     resolve(results);
@@ -58,7 +58,7 @@ class DbService {
     async getTasksDueToday() {
         try {
             const response = await new Promise((resolve, reject) => {
-                const query = "SELECT task_id, task_text, DATE_FORMAT(due_date, '%Y-%m-%d') AS due_date, priority_level, category_name, status FROM tasks JOIN category ON tasks.category_id = category.category_id WHERE tasks.due_date = CURDATE() AND tasks.status = 'Active' ORDER BY tasks.priority_level ASC;";
+                const query = "SELECT task_id, task_text, DATE_FORMAT(due_date, '%Y-%m-%d') AS due_date, priority_level, category_name, status FROM tasks LEFT JOIN category ON tasks.category_id = category.category_id WHERE tasks.due_date = CURDATE() AND tasks.status = 'Active' ORDER BY tasks.priority_level ASC;";
                 connection.query(query, (err, results) => {
                     if(err) reject(new Error(err.message));
                     resolve(results);
@@ -75,7 +75,7 @@ class DbService {
     async getTasksDueWithinAWeek() {
         try {
             const response = await new Promise((resolve, reject) => {
-                const query = "SELECT task_id, task_text, DATE_FORMAT(due_date, '%Y-%m-%d') AS due_date, priority_level, category_name, status FROM tasks JOIN category ON tasks.category_id = category.category_id WHERE tasks.due_date BETWEEN CURDATE() AND CURDATE() + INTERVAL 7 DAY ORDER BY tasks.priority_level ASC;";
+                const query = "SELECT task_id, task_text, DATE_FORMAT(due_date, '%Y-%m-%d') AS due_date, priority_level, category_name, status FROM tasks LEFT JOIN category ON tasks.category_id = category.category_id WHERE tasks.due_date BETWEEN CURDATE() AND CURDATE() + INTERVAL 7 DAY ORDER BY tasks.priority_level ASC;";
                 connection.query(query, (err, results) => {
                     if(err) reject(new Error(err.message));
                     resolve(results);
@@ -92,7 +92,7 @@ class DbService {
     async getTasksLate() {
         try {
             const response = await new Promise((resolve, reject) => {
-                const query = "SELECT task_id, task_text, DATE_FORMAT(due_date, '%Y-%m-%d') AS due_date, priority_level, category_name, status FROM tasks JOIN category ON tasks.category_id = category.category_id WHERE tasks.due_date < CURDATE() AND tasks.status = 'Active' ORDER BY tasks.priority_level ASC;";
+                const query = "SELECT task_id, task_text, DATE_FORMAT(due_date, '%Y-%m-%d') AS due_date, priority_level, category_name, status FROM tasks LEFT JOIN category ON tasks.category_id = category.category_id WHERE tasks.due_date < CURDATE() AND tasks.status = 'Active' ORDER BY tasks.priority_level ASC;";
                 connection.query(query, (err, results) => {
                     if(err) reject(new Error(err.message));
                     resolve(results);
@@ -201,6 +201,40 @@ class DbService {
             const response = await new Promise((resolve, reject) => {
                 const query = "UPDATE tasks SET status = (?) WHERE task_id = (?);";
                 connection.query(query, [status, task_id], (err, results) => {
+                    if(err) reject(new Error(err.message));
+                    resolve(results);
+                });
+            })
+            
+            console.log(response);
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async deleteCategory(category_id) {
+        try {
+            const response = await new Promise((resolve, reject) => {
+                const query = "DELETE FROM category WHERE category_id = (?);";
+                connection.query(query, [category_id], (err, results) => {
+                    if(err) reject(new Error(err.message));
+                    resolve(results);
+                });
+            })
+            
+            console.log(response);
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async updateTaskCategoryBeforeDelete(category_id) {
+        try {
+            const response = await new Promise((resolve, reject) => {
+                const query = "UPDATE tasks SET category_id = NULL WHERE tasks.category_id = (?);";
+                connection.query(query, [category_id], (err, results) => {
                     if(err) reject(new Error(err.message));
                     resolve(results);
                 });

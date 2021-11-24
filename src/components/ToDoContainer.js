@@ -17,6 +17,7 @@ const ToDoContainer = () => {
     const [tasksDueTommorow, setTasksDueTommorow] = useState([]);
     const [tasksDueWithinWeek, setTasksDueWithinWeek] = useState([]);
     const [view, setView] = useState('All');
+    const [deletingCategory, setDeletingCategory] = useState(0);
     
 
     useEffect(() => {
@@ -175,6 +176,43 @@ const ToDoContainer = () => {
         setView(currentView);
     }
 
+    const deleteCategoryRequest = async (e) => {
+        const deleteCategoryInformation = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                category_id: deletingCategory
+             })
+           };
+
+        const res = await fetch('http://localhost:5000/category/delete', deleteCategoryInformation);
+        getExistingCategories();
+        getViewTasks(view);
+        
+        // const data = await res.json()
+        // console.log(data);
+    }
+
+    const updateCategoryBeforeDelete = async (e) => {
+        e.preventDefault();
+        const deleteCategoryInformation = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                category_id: deletingCategory
+             })
+           };
+           console.log(deletingCategory);
+
+        //    fetch('http://localhost:5000/category/update/status')
+        //    .then(deleteCategoryRequest());
+           
+
+     const res = await fetch('http://localhost:5000/category/update/status', deleteCategoryInformation);
+     deleteCategoryRequest();
+    
+    }
+
     return (
         <div className="toDoContainer">
             <h1> To Do List! </h1>
@@ -184,6 +222,20 @@ const ToDoContainer = () => {
                 <input type="text" placeholder="New Category" value={newCategory} onChange={((e) => setNewCategory(e.target.value))}></input>
                 <button className="addTask">Create New Category</button>
             </form>
+
+            <form className="form" onSubmit={updateCategoryBeforeDelete}>
+            <div>Delete Category: </div>
+                 <select className="" value={deletingCategory} onChange={((e) => setDeletingCategory(e.target.value))}>
+                <option value="0" selected disabled hidden>Choose here</option>
+                {taskCategories.map((category) => (
+                    <option className="" value={category.category_id}>
+                    {category.category_name}
+                    </option>
+                ))}
+                </select>
+                <button className="addTask">Delete This Category</button>
+            </form>
+
 
             <form className="form" onSubmit={onSubmit}>
                     <div>Task Description: </div>

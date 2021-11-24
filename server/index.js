@@ -113,6 +113,21 @@ app.post('/tasks/update', (req, res) => {
     .catch(err => console.log(err));
 });
 
+app.post('/category/delete', (req, res) => {
+    const {category_id} = req.body;
+    const db = dbService.getDbServiceInstance();
+    const result = db.deleteCategory(category_id);
+    result.then(data => res.json(data))
+    .catch(err => console.log(err));
+});
+
+app.post('/category/update/status', (req, res) => {
+    const {category_id} = req.body;
+    const db = dbService.getDbServiceInstance();
+    const result = db.updateTaskCategoryBeforeDelete(category_id);
+    result.then(data => res.json(data))
+    .catch(err => console.log(err));
+});
 
 const PORT = process.env.PORT || 5000;
 
