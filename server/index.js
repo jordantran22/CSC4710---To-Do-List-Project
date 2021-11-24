@@ -64,6 +64,15 @@ app.post('/tasks/delete', (req, res) => {
     .catch(err => console.log(err));
 });
 
+app.post('/tasks/update', (req, res) => {
+    const {task_id, status} = req.body;
+    console.log(task_id + status);
+    const db = dbService.getDbServiceInstance();
+    const result = db.updateTaskStatus(task_id, status);
+    result.then(data => res.json(data))
+    .catch(err => console.log(err));
+});
+
 
 const PORT = process.env.PORT || 5000;
 

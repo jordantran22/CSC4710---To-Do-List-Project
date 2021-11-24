@@ -102,6 +102,7 @@ select {
   font-size: x-large;
   cursor: pointer;
   margin: 1rem;
+  text-decoration: none;
 }
 
 .completedAndDeletedButtons {
@@ -114,4 +115,10 @@ select {
   font-size: x-large;
   cursor: pointer;
   margin: 1rem;
+  text-decoration: none;
+}
+
+.taskComponentCompleted {
+  width: 50vw;
+  text-decoration: line-through;
 }

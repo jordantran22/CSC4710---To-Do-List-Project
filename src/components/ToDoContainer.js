@@ -186,7 +186,7 @@ const ToDoContainer = () => {
            
             <div>
                 {tasks.map((task) => (
-                <Task task={task} deleteTask={() => deleteTaskRequest(task.task_id)}></Task>
+                <Task task={task} deleteTask={() => deleteTaskRequest(task.task_id)} getTasks={() => getTaskApiRequest()}></Task>
                 ))}
             </div>
           

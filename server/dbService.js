@@ -123,6 +123,23 @@ class DbService {
             console.log(error);
         }
     }
+
+    async updateTaskStatus(task_id, status) {
+        try {
+            const response = await new Promise((resolve, reject) => {
+                const query = "UPDATE tasks SET status = (?) WHERE task_id = (?);";
+                connection.query(query, [status, task_id], (err, results) => {
+                    if(err) reject(new Error(err.message));
+                    resolve(results);
+                });
+            })
+            
+            console.log(response);
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }
 
 module.exports = DbService;
