@@ -8,18 +8,27 @@ const ToDoContainer = () => {
     const [date, setDate] = useState([]);
     const [newCategory, setNewCategory] = useState('');
     const [taskCategory, setTaskCategory] = useState('');
-    const [priorityLevel, setPriorityLevel] = useState(0);
+    const [priorityLevel, setPriorityLevel] = useState(1);
+    const [currentTaskCategory, setCurrentTaskCategory] = useState(''); 
     const [categories, setCategories] = useState([]); // onEffect -> make api request for categories
-
+    
     const onSubmit = (e) => {
         e.preventDefault();
-   
+        
+        //  TODO: broken right now, fix later 
+        if(newCategory) {
+            setCurrentTaskCategory(newCategory);
+        } else if(!taskCategory && newCategory){
+            setCurrentTaskCategory(newCategory);
+        }
+
         const newTask = {
             id:  Math.floor(Math.random() * 10000) + 1,
             text: taskDescription,
-            newCategory: newCategory,
+            category: currentTaskCategory,
             priorityLevel: priorityLevel,
-            date: date
+            date: date,
+            status: 'Active'
         }
         addNewTask(newTask);
     }
@@ -65,6 +74,9 @@ const ToDoContainer = () => {
                 <button className="addTask">Add Task</button>
             </form>
 
+            <br />
+            <h1>Current Tasks: </h1>
+            {tasks.length < 1 ? <h1>All Tasks Completed!</h1> : <div></div>}
            
             <div>
                 {tasks.map((task) => (

@@ -10,7 +10,7 @@ const Task = ({task}) => {
 
             <div className="taskAttributes">
                 <div>Category: </div>
-
+                <div>{task.category}</div>
             </div>
 
 
@@ -21,6 +21,7 @@ const Task = ({task}) => {
 
             <div className="taskAttributes">
                 <div>Status: </div>
+                <div>{task.status}</div>
             </div>
 
             <div className="taskAttributes">
