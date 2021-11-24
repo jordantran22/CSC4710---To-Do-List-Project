@@ -37,10 +37,45 @@ class DbService {
         }
     }
 
+    async getTasksDueTommorow() {
+        try {
+            const response = await new Promise((resolve, reject) => {
+                const query = "SELECT task_id, task_text, DATE_FORMAT(due_date, '%Y-%m-%d') AS due_date, priority_level, category_name, status FROM tasks JOIN category ON tasks.category_id = category.category_id WHERE tasks.due_date = CURDATE() + INTERVAL 1 DAY ORDER BY tasks.priority_level ASC;";
+                connection.query(query, (err, results) => {
+                    if(err) reject(new Error(err.message));
+                    resolve(results);
+                });
+            })
+            
+            console.log(response);
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
     async getTasksDueToday() {
         try {
             const response = await new Promise((resolve, reject) => {
                 const query = "SELECT task_id, task_text, DATE_FORMAT(due_date, '%Y-%m-%d') AS due_date, priority_level, category_name, status FROM tasks JOIN category ON tasks.category_id = category.category_id WHERE tasks.due_date = CURDATE() AND tasks.status = 'Active' ORDER BY tasks.priority_level ASC;";
+                connection.query(query, (err, results) => {
+                    if(err) reject(new Error(err.message));
+                    resolve(results);
+                });
+            })
+            
+            console.log(response);
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async getTasksDueWithinAWeek() {
+        try {
+            const response = await new Promise((resolve, reject) => {
+                const query = "SELECT task_id, task_text, DATE_FORMAT(due_date, '%Y-%m-%d') AS due_date, priority_level, category_name, status FROM tasks JOIN category ON tasks.category_id = category.category_id WHERE tasks.due_date BETWEEN CURDATE() AND CURDATE() + INTERVAL 7 DAY ORDER BY tasks.priority_level ASC;";
                 connection.query(query, (err, results) => {
                     if(err) reject(new Error(err.message));
                     resolve(results);

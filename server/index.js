@@ -29,9 +29,29 @@ app.get('/tasks/today', (req, res) => {
     // });
 });
 
+app.get('/tasks/tommorow', (req, res) => {
+    const db = dbService.getDbServiceInstance();
+    const result = db.getTasksDueTommorow();
+    result.then(data => res.json(data))
+    .catch(err => console.log(err));
+    // res.json({
+    //     success: true
+    // });
+});
+
 app.get('/tasks/late', (req, res) => {
     const db = dbService.getDbServiceInstance();
     const result = db.getTasksLate();
+    result.then(data => res.json(data))
+    .catch(err => console.log(err));
+    // res.json({
+    //     success: true
+    // });
+});
+
+app.get('/tasks/week', (req, res) => {
+    const db = dbService.getDbServiceInstance();
+    const result = db.getTasksDueWithinAWeek();
     result.then(data => res.json(data))
     .catch(err => console.log(err));
     // res.json({

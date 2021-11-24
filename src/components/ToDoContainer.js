@@ -14,6 +14,8 @@ const ToDoContainer = () => {
 
     const [tasksDueToday, setTasksDueToday] = useState([]);
     const [tasksLate, setTasksLate] = useState([]);
+    const [tasksDueTommorow, setTasksDueTommorow] = useState([]);
+    const [tasksDueWithinWeek, setTasksDueWithinWeek] = useState([]);
     const [view, setView] = useState('All');
     
 
@@ -35,6 +37,24 @@ const ToDoContainer = () => {
         setTasksDueToday(data);
 
         console.log(tasksDueToday);
+    }
+
+    const getTasksDueTommorowRequest = async () => {
+        const res = await fetch('http://localhost:5000/tasks/tommorow');
+        console.log(res);
+        const data = await res.json();
+        setTasksDueTommorow(data);
+
+        console.log(tasksDueTommorow);
+    }
+    
+    const getTaskDueWithinWeek = async() => {
+        const res = await fetch('http://localhost:5000/tasks/week');
+        console.log(res);
+        const data = await res.json();
+        setTasksDueWithinWeek(data);
+
+        console.log(tasksDueWithinWeek);
     }
 
     const getTasksLateRequest = async () => {
@@ -146,6 +166,10 @@ const ToDoContainer = () => {
             getTasksLateRequest();
         } else if(currentView === 'All') {
             getTaskApiRequest();
+        } else if(currentView === 'Due Tommorow') {
+            getTasksDueTommorowRequest();
+        } else if(currentView === 'Due In A Week') {
+            getTaskDueWithinWeek();
         }
 
         setView(currentView);
@@ -246,6 +270,27 @@ const ToDoContainer = () => {
                    {tasksLate.length < 1 ? <h1>No Overdue Tasks!</h1> : <h1>Tasks Overdue: </h1>}
                     {tasksLate.map((task) => (
                     <Task task={task} deleteTask={() => deleteTaskRequest(task.task_id)} getTasks={() => getTasksLateRequest()}></Task>
+                    ))}
+               </div> : <div></div>
+           }
+
+
+           {
+               view === 'Due Tommorow' ? 
+               <div>
+                   {tasksLate.length < 1 ? <h1>No Tasks Due Tommorow!</h1> : <h1>Tasks Due Tommorow: </h1>}
+                    {tasksDueTommorow.map((task) => (
+                    <Task task={task} deleteTask={() => deleteTaskRequest(task.task_id)} getTasks={() => getTasksDueTommorowRequest()}></Task>
+                    ))}
+               </div> : <div></div>
+           }
+
+           {
+               view === 'Due In A Week' ? 
+               <div>
+                   {tasksDueWithinWeek.length < 1 ? <h1>No Tasks Due This Week!</h1> : <h1>Tasks Due This Week: </h1>}
+                    {tasksDueWithinWeek.map((task) => (
+                    <Task task={task} deleteTask={() => deleteTaskRequest(task.task_id)} getTasks={() => getTaskDueWithinWeek()}></Task>
                     ))}
                </div> : <div></div>
            }
