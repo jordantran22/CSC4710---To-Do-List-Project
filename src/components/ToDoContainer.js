@@ -12,6 +12,40 @@ const ToDoContainer = () => {
     const [currentTaskCategory, setCurrentTaskCategory] = useState(''); 
     const [categories, setCategories] = useState([]); // onEffect -> make api request for categories
     
+
+    useEffect(() => {
+        try {
+            getTaskApiRequest();
+        } catch (e) {
+            console.log(e)
+        }
+    }, []);
+
+    const getTaskApiRequest = async () => {
+        const res = await fetch('http://localhost:5000/tasks');
+        console.log(res);
+        const data = await res.json();
+        console.log(data);
+        setTasks(data);
+
+        console.log(tasks);
+    }
+
+    const postNewTaskApiRequest = async (newTask) => {
+        // const newTaskInformation = {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', },
+        //     body: JSON.stringify({
+        //         name: "jordan"
+        //      })
+        //    };
+
+        // const res = await fetch('http://localhost:5000/tasks/new', newTaskInformation);
+        // console.log(res);
+        // const data = await res.json()
+        // console.log(data);
+    }
+
     const onSubmit = (e) => {
         e.preventDefault();
         
@@ -23,7 +57,6 @@ const ToDoContainer = () => {
         }
 
         const newTask = {
-            id:  Math.floor(Math.random() * 10000) + 1,
             text: taskDescription,
             category: currentTaskCategory,
             priorityLevel: priorityLevel,
@@ -31,6 +64,9 @@ const ToDoContainer = () => {
             status: 'Active'
         }
         addNewTask(newTask);
+        postNewTaskApiRequest(newTask);
+
+
     }
     const addNewTask = (newTask) => {
         setTasks([...tasks, newTask]);

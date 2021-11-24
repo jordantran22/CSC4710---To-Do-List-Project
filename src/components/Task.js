@@ -5,18 +5,18 @@ const Task = ({task}) => {
         <div className="taskComponent">
             <div className="taskAttributes">
                 <div>Task: </div>
-                <div>{task.text}</div>
+                <div>{task.task_text}</div>
             </div>
 
             <div className="taskAttributes">
                 <div>Category: </div>
-                <div>{task.category}</div>
+                <div>{task.category_name}</div>
             </div>
 
 
             <div className="taskAttributes">
                 <div>Due Date: </div>
-                <div>{task.date}</div>
+                <div>{task.due_date}</div>
             </div>
 
             <div className="taskAttributes">
@@ -26,7 +26,7 @@ const Task = ({task}) => {
 
             <div className="taskAttributes">
                 <div>Priority: </div>
-                <div>{task.priorityLevel}</div>
+                <div>{task.priority_level}</div>
             </div>
         </div>
     )
