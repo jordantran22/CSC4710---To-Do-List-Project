@@ -34,22 +34,36 @@ app.post('/tasks/submit', (req, res) => {
     const result = db.insertNewTask(task_text, category_id, priority_level, due_date, status);
     result.then(data => res.json({success: true}))
     .catch(err => console.log(err));
-    // const requestBody = req.body;
-    // const taskText = requestBody.text_text;
-    // const categoryName = requestBody.category_name;
-    // const priorityLevel = requestBody.priority_level;
-    // const dueDate = requestBody.due_date;
-    // const status = requestBody.status;
-
-   
-    // res.json({
-    //     success: true
-    // });
-    // console.log(req.body);
-    // const newTask = req.body;
-    // console.log(newTask.task);
-    // res.send('Testing post request')
 });
+
+
+app.post('/category/new', (req, res) => {
+    const {new_category} = req.body;
+    const db = dbService.getDbServiceInstance();
+    const result = db.insertNewCategory(new_category);
+    result.then(data => res.json(data))
+    .catch(err => console.log(err));
+});
+
+// app.get('/category', (req, res) => {
+//     var query = require('url').parse(req.url,true).query;
+//     const {new_category} = query.name;
+//     console.log(new_category);
+//     const db = dbService.getDbServiceInstance();
+//     const result = db.getNewCategoryId(new_category);
+//     result.then(data => res.json(data))
+//     .catch(err => console.log(err));
+// })
+
+app.post('/tasks/delete', (req, res) => {
+    const {task_id} = req.body;
+    console.log(task_id);
+    const db = dbService.getDbServiceInstance();
+    const result = db.deleteTask(task_id);
+    result.then(data => res.json(data))
+    .catch(err => console.log(err));
+});
+
 
 const PORT = process.env.PORT || 5000;
 

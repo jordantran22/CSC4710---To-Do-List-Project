@@ -72,6 +72,57 @@ class DbService {
             console.log(error);
         }
     }
+
+    async insertNewCategory(category_name) {
+        try {
+            const response = await new Promise((resolve, reject) => {
+                const query = "INSERT INTO category (category_name) VALUES (?);";
+                connection.query(query, [category_name], (err, results) => {
+                    if(err) reject(new Error(err.message));
+                    resolve(results);
+                });
+            })
+            
+            console.log(response);
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    // async getNewCategoryId(new_category) {
+    //     try {
+    //         const response = await new Promise((resolve, reject) => {
+    //             const query = "SELECT category_id FROM category WHERE category_name = ?;";
+    //             connection.query(query, [new_category], (err, results) => {
+    //                 if(err) reject(new Error(err.message));
+    //                 resolve(results);
+    //             });
+    //         })
+            
+    //         console.log(response);
+    //         return response;
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
+
+    async deleteTask(task_id) {
+        try {
+            const response = await new Promise((resolve, reject) => {
+                const query = "DELETE FROM tasks WHERE task_id = (?);";
+                connection.query(query, [task_id], (err, results) => {
+                    if(err) reject(new Error(err.message));
+                    resolve(results);
+                });
+            })
+            
+            console.log(response);
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }
 
 module.exports = DbService;

@@ -33,11 +33,6 @@ code {
   margin-right: auto;
 }
 
-.taskComponent {
-  padding: 2rem;
-  border: solid 1px;
-  margin: 1rem;
-}
 
 h1 {
   text-align: center;
@@ -74,4 +69,49 @@ select {
 
 .taskAttributes {
   display: flex;
+}
+
+.attributeKey {
+  padding: 1rem;
+  font-size: x-large;
+  font-weight: bolder;
+}
+
+.attributeValue {
+  padding: 1rem;
+  font-size: larger;
+}
+
+.taskContainer {
+  display: flex;
+  padding: 2rem;
+  border: solid 1px;
+  margin: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 10px 16px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%) !important
+}
+
+.taskComponent {
+  width: 50vw;
+}
+
+.deleteButton {
+  position: relative;
+  color: red;
+  font-weight: bolder;
+  font-size: x-large;
+  cursor: pointer;
+  margin: 1rem;
+}
+
+.completedAndDeletedButtons {
+  display: block;
+}
+
+.checkButton {
+  color: green;
+  font-weight: bolder;
+  font-size: x-large;
+  cursor: pointer;
+  margin: 1rem;
 }
