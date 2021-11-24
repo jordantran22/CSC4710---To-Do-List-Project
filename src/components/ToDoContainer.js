@@ -11,16 +11,39 @@ const ToDoContainer = () => {
     const [priorityLevel, setPriorityLevel] = useState(0);
     const [currentTaskCategory, setCurrentTaskCategory] = useState(0); 
     const [catergoryName, setCategoryName] = useState('');
+
+    const [tasksDueToday, setTasksDueToday] = useState([]);
+    const [tasksLate, setTasksLate] = useState([]);
     
 
     useEffect(() => {
         try {
             getTaskApiRequest();
             getExistingCategories();
+            getTasksDueTodayRequest();
+            getTasksLateRequest();
         } catch (e) {
             console.log(e)
         }
     }, []);
+
+    const getTasksDueTodayRequest = async () => {
+        const res = await fetch('http://localhost:5000/tasks/today');
+        console.log(res);
+        const data = await res.json();
+        setTasksDueToday(data);
+
+        console.log(tasksDueToday);
+    }
+
+    const getTasksLateRequest = async () => {
+        const res = await fetch('http://localhost:5000/tasks/late');
+        console.log(res);
+        const data = await res.json();
+        setTasksLate(data);
+
+        console.log(tasksLate);
+    }
 
     const getTaskApiRequest = async () => {
         const res = await fetch('http://localhost:5000/tasks');
@@ -80,44 +103,12 @@ const ToDoContainer = () => {
     const onSubmit = (e) => {
         e.preventDefault();
 
-        // if(newCategory) {
-        //     postNewCategoryRequest();
-        // }
-
-        // for(var i = 0; i < taskCategories.length; i++) {
-            
-        // }
-
-       
-
-        // const newTask = {
-        //     task_text: taskDescription,
-        //     category_name: catergoryName,
-        //     priority_level: priorityLevel,
-        //     due_date: date,
-        //     status: 'Active'
-        // }
+    
      
         postNewTaskApiRequest();
 
 
     }
-
-    // const deleteTaskRequest = async(taskId) => {
-    //     // const deleteTaskInformation = {
-    //     //     method: 'POST',
-    //     //     headers: { 'Content-Type': 'application/json'},
-    //     //     body: JSON.stringify({
-    //     //         task_id: taskId
-    //     //      })
-    //     //    };
-    //     // }
-
-    //     // const res = await fetch('http://localhost:5000/tasks/delete', deleteTaskInformation);
-    //     // const data = await res.json()
-    //     // console.log(data);
-    //     // getExistingCategories();
-    // }
 
     const deleteTaskRequest = async (taskId) => {
         const deleteTaskInformation = {
@@ -181,14 +172,34 @@ const ToDoContainer = () => {
             </form>
 
             <br />
-            <h1>Current Tasks: </h1>
-            {tasks.length < 1 ? <h1>All Tasks Completed!</h1> : <div></div>}
-           
+        
+          
+            {tasks.length < 1 ? <h1>All Tasks Completed!</h1> : 
+            
             <div>
-                {tasks.map((task) => (
-                <Task task={task} deleteTask={() => deleteTaskRequest(task.task_id)} getTasks={() => getTaskApiRequest()}></Task>
-                ))}
-            </div>
+                  {tasksDueToday.length < 1 ? <h1>No Tasks Due Today!</h1> : <h1>Tasks Due Today: </h1>}
+                  <div>
+                    {tasksDueToday.map((task) => (
+                    <Task task={task} deleteTask={() => deleteTaskRequest(task.task_id)} getTasks={() => getTasksDueTodayRequest()}></Task>
+                    ))}
+                  </div>
+
+                  {tasksLate.length < 1 ? <h1>No Overdue Tasks!</h1> : <h1>Tasks Overdue: </h1>}
+                  <div>
+                    {tasksLate.map((task) => (
+                    <Task task={task} deleteTask={() => deleteTaskRequest(task.task_id)} getTasks={() => getTasksLateRequest()}></Task>
+                    ))}
+                  </div>
+
+                  <h1>All Tasks: </h1>
+                  <div>
+                    {tasks.map((task) => (
+                    <Task task={task} deleteTask={() => deleteTaskRequest(task.task_id)} getTasks={() => getTaskApiRequest()}></Task>
+                    ))}
+                 </div>
+            </div>}
+           
+            
           
 
         </div>

@@ -19,6 +19,26 @@ app.get('/tasks', (req, res) => {
     // });
 });
 
+app.get('/tasks/today', (req, res) => {
+    const db = dbService.getDbServiceInstance();
+    const result = db.getTasksDueToday();
+    result.then(data => res.json(data))
+    .catch(err => console.log(err));
+    // res.json({
+    //     success: true
+    // });
+});
+
+app.get('/tasks/late', (req, res) => {
+    const db = dbService.getDbServiceInstance();
+    const result = db.getTasksLate();
+    result.then(data => res.json(data))
+    .catch(err => console.log(err));
+    // res.json({
+    //     success: true
+    // });
+});
+
 app.get('/tasks/categories', (req, res) => {
     const db = dbService.getDbServiceInstance();
     const result = db.getTaskCategories();
