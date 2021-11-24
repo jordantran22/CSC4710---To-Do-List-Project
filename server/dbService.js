@@ -54,18 +54,20 @@ class DbService {
         }
     }
 
-    async insertNewTask(task) {
+    async insertNewTask(task_text, category_id, priority_level, due_date, status) {
         try {
+            console.log(status);
             const response = await new Promise((resolve, reject) => {
-                const query = "INSERT INTO tasks VALUES ();";
-                connection.query(query, (err, results) => {
+                const query = "INSERT INTO tasks (task_text, category_id, priority_level, due_date, status) VALUES (?,?,?,?,'Active');";
+                connection.query(query, [task_text, category_id, priority_level, due_date, status], (err, results) => {
                     if(err) reject(new Error(err.message));
                     resolve(results);
                 });
             })
             
             console.log(response);
-            return response;
+            //console.log(insertTask);
+            // return response;
         } catch (error) {
             console.log(error);
         }

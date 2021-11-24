@@ -7,9 +7,9 @@ const ToDoContainer = () => {
     const [tasks, setTasks] = useState([]);
     const [date, setDate] = useState([]);
     const [taskCategories, setTaskCategories] = useState([]);
-    const [newCategory, setNewCategory] = useState('');
+    const [newCategory, setNewCategory] = useState(''); // TODO: Implement logic for new category
     const [priorityLevel, setPriorityLevel] = useState(1);
-    const [currentTaskCategory, setCurrentTaskCategory] = useState(''); 
+    const [currentTaskCategory, setCurrentTaskCategory] = useState(1); 
     
 
     useEffect(() => {
@@ -40,19 +40,29 @@ const ToDoContainer = () => {
         console.log(taskCategories);
     }
 
-    const postNewTaskApiRequest = async (newTask) => {
-        // const newTaskInformation = {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', },
-        //     body: JSON.stringify({
-        //         name: "jordan"
-        //      })
-        //    };
+    const postNewTaskApiRequest = async () => {
+        const newTaskInformation = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                task_text: taskDescription,
+                category_id: currentTaskCategory,
+                priority_level: priorityLevel,
+                due_date: date,
+                status: 'Active'
+             })
+           };
 
-        // const res = await fetch('http://localhost:5000/tasks/new', newTaskInformation);
-        // console.log(res);
-        // const data = await res.json()
-        // console.log(data);
+        // const res = await fetch('http://localhost:5000/tasks/submit', {
+        //     headers: {'Content-type' : 'application/json'},
+        //     method: 'POST',
+        //     body: JSON.stringify({name:"jordan"})
+        // });
+
+        const res = await fetch('http://localhost:5000/tasks/submit', newTaskInformation);
+        console.log(res);
+        const data = await res.json()
+        console.log(data);
     }
 
     const onSubmit = (e) => {
@@ -73,7 +83,8 @@ const ToDoContainer = () => {
             status: 'Active'
         }
         addNewTask(newTask);
-        postNewTaskApiRequest(newTask);
+        console.log(currentTaskCategory);
+        postNewTaskApiRequest();
 
 
     }
@@ -97,7 +108,7 @@ const ToDoContainer = () => {
                 <select className="" value={currentTaskCategory} onChange={((e) => setCurrentTaskCategory(e.target.value))}>
                 <option value="" selected disabled hidden>Choose here</option>
                 {taskCategories.map((category) => (
-                    <option className="" value={category.category_name}>
+                    <option className="" value={category.category_id}>
                     {category.category_name}
                     </option>
                 ))}
