@@ -65,6 +65,7 @@ select {
 .addTask:hover {
   background-color: darkgreen;
   color: white;
+  cursor: pointer;
 }
 
 .taskAttributes {
@@ -121,4 +122,32 @@ select {
 .taskComponentCompleted {
   width: 50vw;
   text-decoration: line-through;
+}
+
+.editCategoryButton {
+  width: auto;
+  background-color: 	#7FFF00;
+  padding: 1rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: bolder;
+  margin-bottom: 2rem;
+  text-align: center;
+  box-shadow: 0 10px 16px 0 rgb(0 0 0 / 20%), 0 3px 10px 0 rgb(0 0 0 / 19%) !important
+}
+
+.editCategoryButton:hover {
+  background-color: darkgreen;
+  color: white;
+  cursor: pointer;
+}
+
+.editCategoryContainer {
+  margin-bottom: 3rem;
+}
+
+i {
+  font-size: xx-large;
+  margin: auto;
 }

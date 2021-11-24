@@ -18,6 +18,7 @@ const ToDoContainer = () => {
     const [tasksDueWithinWeek, setTasksDueWithinWeek] = useState([]);
     const [view, setView] = useState('All');
     const [deletingCategory, setDeletingCategory] = useState(0);
+    const [editCategory, setEditCategory] = useState(false);
     
 
     useEffect(() => {
@@ -213,11 +214,20 @@ const ToDoContainer = () => {
     
     }
 
+    const setEditCategoryView = () => {
+        setEditCategory(!editCategory);
+    }
+
     return (
         <div className="toDoContainer">
             <h1> To Do List! </h1>
 
-            <form className="form" onSubmit={postNewCategoryRequest}>
+            <button className="editCategoryButton form" onClick={setEditCategoryView}>Edit Categories! <i class='bx bxs-down-arrow-circle'></i></button>
+
+            {editCategory ? 
+            
+                <div className="editCategoryContainer">
+                    <form className="form" onSubmit={postNewCategoryRequest}>
             <div>Create New Category: </div>
                 <input type="text" placeholder="New Category" value={newCategory} onChange={((e) => setNewCategory(e.target.value))}></input>
                 <button className="addTask">Create New Category</button>
@@ -235,6 +245,27 @@ const ToDoContainer = () => {
                 </select>
                 <button className="addTask">Delete This Category</button>
             </form>
+
+                </div> : <div></div>
+            }
+            {/* <form className="form" onSubmit={postNewCategoryRequest}>
+            <div>Create New Category: </div>
+                <input type="text" placeholder="New Category" value={newCategory} onChange={((e) => setNewCategory(e.target.value))}></input>
+                <button className="addTask">Create New Category</button>
+            </form>
+
+            <form className="form" onSubmit={updateCategoryBeforeDelete}>
+            <div>Delete Category: </div>
+                 <select className="" value={deletingCategory} onChange={((e) => setDeletingCategory(e.target.value))}>
+                <option value="0" selected disabled hidden>Choose here</option>
+                {taskCategories.map((category) => (
+                    <option className="" value={category.category_id}>
+                    {category.category_name}
+                    </option>
+                ))}
+                </select>
+                <button className="addTask">Delete This Category</button>
+            </form> */}
 
 
             <form className="form" onSubmit={onSubmit}>
