@@ -15,6 +15,11 @@ const Task = ({task, deleteTask, getTasks}) => {
         
     }
 
+    const deleteThisTask = () => {
+        deleteTask();
+        getTasks();
+    }
+
     const updateStatusRequest = async () => {
         const statusInformation = {
             method: 'POST',
@@ -63,7 +68,7 @@ const Task = ({task, deleteTask, getTasks}) => {
             </div>
 
             <div className="completedAndDeletedButtons" >
-                <div className="deleteButton" onClick={deleteTask}> X </div>
+                <div className="deleteButton" onClick={deleteThisTask}> X </div>
                 <div className="checkButton" onClick={setStatus}>  ✓</div>
             </div>
         </div>

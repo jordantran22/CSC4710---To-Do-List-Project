@@ -14,6 +14,7 @@ const ToDoContainer = () => {
 
     const [tasksDueToday, setTasksDueToday] = useState([]);
     const [tasksLate, setTasksLate] = useState([]);
+    const [view, setView] = useState('All');
     
 
     useEffect(() => {
@@ -82,7 +83,8 @@ const ToDoContainer = () => {
         console.log(res);
         const data = await res.json()
         console.log(data);
-        getTaskApiRequest();
+        // getTaskApiRequest();
+        getViewTasks(view);
     }
 
     const postNewCategoryRequest = async () => {
@@ -122,15 +124,31 @@ const ToDoContainer = () => {
         const res = await fetch('http://localhost:5000/tasks/delete', deleteTaskInformation);
         const data = await res.json()
         console.log(data);
-        getTaskApiRequest();
+
+        // if (view === 'All') {
+        //     getTaskApiRequest();
+        // } else if (view === 'Due Today') {
+        //     getTasksDueTodayRequest();
+        // } else if (view === 'Late') {
+        //     getTasksLateRequest();
+        // }
+
+        // getTaskApiRequest();
+        getViewTasks(view);
+
     }
 
+    const getViewTasks = (currentView) => {
+     
+        if(currentView === 'Due Today') {
+            getTasksDueTodayRequest();
+        }  else if(currentView === 'Late') {
+            getTasksLateRequest();
+        } else if(currentView === 'All') {
+            getTaskApiRequest();
+        }
 
-
-
-    const addNewTask = (newTask) => {
-        setTasks([...tasks, newTask]);
-        console.log(tasks);
+        setView(currentView);
     }
 
     return (
@@ -173,8 +191,66 @@ const ToDoContainer = () => {
 
             <br />
         
+        <h1> Change Tasks View List </h1>
+           <form className="form">
+           <select className="" value={view} onChange={((e) => getViewTasks(e.target.value))}>
+                    <option value="All">All</option>
+                    <option value="Due Today">Due Today</option>
+                    <option value="Due Tommorow">Due Tommorow</option>
+                    <option value="Late">Late Tasks</option>
+                    <option value="Due In A Week">Due In A Week</option>
+                </select>
+           </form>
+
+           {
+               view === 'Due Today' ? <div>
+                {tasksDueToday.length < 1 ? <h1>No Tasks Due Today!</h1> : <h1>Tasks Due Today: </h1>}
+                    {tasksDueToday.map((task) => (
+                    <Task task={task} deleteTask={() => deleteTaskRequest(task.task_id)} getTasks={() => getTasksDueTodayRequest()}></Task>
+                    ))}
+             </div> : <div> </div>
+           }
+
+           {
+               view === 'All' && tasks.length > 0 ? 
+
+                <div>
+                    
+                      {/* <div>
+                        {tasksDueToday.map((task) => (
+                        <Task task={task} deleteTask={() => deleteTaskRequest(task.task_id)} getTasks={() => getTasksDueTodayRequest()}></Task>
+                        ))}
+                      </div>
+    
+                     
+                      <div>
+                        {tasksLate.map((task) => (
+                        <Task task={task} deleteTask={() => deleteTaskRequest(task.task_id)} getTasks={() => getTasksLateRequest()}></Task>
+                        ))}
+                      </div> */}
+    
+                      
+                      <div>
+                      {tasks.length < 1 ? <h1>All Tasks Completed!</h1> : <h1>All Tasks: </h1>}
+                        {tasks.map((task) => (
+                        <Task task={task} deleteTask={() => deleteTaskRequest(task.task_id)} getTasks={() => getTaskApiRequest()}></Task>
+                        ))}
+                     </div>
+                </div> : <div/>
+           }
+
+           {
+               view === 'Late' ? 
+
+               <div>
+                   {tasksLate.length < 1 ? <h1>No Overdue Tasks!</h1> : <h1>Tasks Overdue: </h1>}
+                    {tasksLate.map((task) => (
+                    <Task task={task} deleteTask={() => deleteTaskRequest(task.task_id)} getTasks={() => getTasksLateRequest()}></Task>
+                    ))}
+               </div> : <div></div>
+           }
           
-            {tasks.length < 1 ? <h1>All Tasks Completed!</h1> : 
+            {/* {tasks.length < 1 ? <h1>All Tasks Completed!</h1> : 
             
             <div>
                   {tasksDueToday.length < 1 ? <h1>No Tasks Due Today!</h1> : <h1>Tasks Due Today: </h1>}
@@ -191,13 +267,14 @@ const ToDoContainer = () => {
                     ))}
                   </div>
 
-                  <h1>All Tasks: </h1>
+                  
                   <div>
+                  <h1>All Tasks: </h1>
                     {tasks.map((task) => (
                     <Task task={task} deleteTask={() => deleteTaskRequest(task.task_id)} getTasks={() => getTaskApiRequest()}></Task>
                     ))}
                  </div>
-            </div>}
+            </div>} */}
            
             
           
