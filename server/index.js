@@ -16,6 +16,13 @@ app.get('/tasks', (req, res) => {
     // });
 });
 
+app.get('/tasks/categories', (req, res) => {
+    const db = dbService.getDbServiceInstance();
+    const result = db.getTaskCategories();
+    result.then(data => res.json(data))
+    .catch(err => console.log(err))
+})
+
 app.post('/tasks/new', (req, res) => {
     console.log(req.body);
     // const newTask = req.body;

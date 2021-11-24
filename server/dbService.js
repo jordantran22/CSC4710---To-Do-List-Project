@@ -37,6 +37,23 @@ class DbService {
         }
     }
 
+    async getTaskCategories() {
+        try {
+            const response = await new Promise((resolve, reject) => {
+                const query = "SELECT category_id, category_name FROM category;";
+                connection.query(query, (err, results) => {
+                    if(err) reject(new Error(err.message));
+                    resolve(results);
+                });
+            })
+            
+            console.log(response);
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     async insertNewTask(task) {
         try {
             const response = await new Promise((resolve, reject) => {

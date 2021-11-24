@@ -6,16 +6,16 @@ const ToDoContainer = () => {
     const [taskDescription, setTaskDescription] = useState('');
     const [tasks, setTasks] = useState([]);
     const [date, setDate] = useState([]);
+    const [taskCategories, setTaskCategories] = useState([]);
     const [newCategory, setNewCategory] = useState('');
-    const [taskCategory, setTaskCategory] = useState('');
     const [priorityLevel, setPriorityLevel] = useState(1);
     const [currentTaskCategory, setCurrentTaskCategory] = useState(''); 
-    const [categories, setCategories] = useState([]); // onEffect -> make api request for categories
     
 
     useEffect(() => {
         try {
             getTaskApiRequest();
+            getExistingCategories();
         } catch (e) {
             console.log(e)
         }
@@ -29,6 +29,15 @@ const ToDoContainer = () => {
         setTasks(data);
 
         console.log(tasks);
+    }
+
+    const getExistingCategories = async () => {
+        const res = await fetch('http://localhost:5000/tasks/categories');
+        const data = await res.json();
+        console.log(data);
+        setTaskCategories(data);
+
+        console.log(taskCategories);
     }
 
     const postNewTaskApiRequest = async (newTask) => {
@@ -50,17 +59,17 @@ const ToDoContainer = () => {
         e.preventDefault();
         
         //  TODO: broken right now, fix later 
-        if(newCategory) {
-            setCurrentTaskCategory(newCategory);
-        } else if(!taskCategory && newCategory){
-            setCurrentTaskCategory(newCategory);
-        }
+        // if(newCategory) {
+        //     setCurrentTaskCategory(newCategory);
+        // } else if(!taskCategory && newCategory){
+        //     setCurrentTaskCategory(newCategory);
+        // }
 
         const newTask = {
-            text: taskDescription,
-            category: currentTaskCategory,
-            priorityLevel: priorityLevel,
-            date: date,
+            task_text: taskDescription,
+            category_name: currentTaskCategory,
+            priority_level: priorityLevel,
+            due_date: date,
             status: 'Active'
         }
         addNewTask(newTask);
@@ -85,15 +94,13 @@ const ToDoContainer = () => {
                 <input type="text" placeholder="New Category" value={newCategory} onChange={((e) => setNewCategory(e.target.value))}></input>
 
                 <div>Select Existing Category: </div>
-                <select className="" value={taskCategory} onChange={((e) => setTaskCategory(e.target.value))}>
+                <select className="" value={currentTaskCategory} onChange={((e) => setCurrentTaskCategory(e.target.value))}>
                 <option value="" selected disabled hidden>Choose here</option>
-                    {Object.entries(categories).map(([key, value]) => {
-                        return (
-                        <option className="" value={key}>
-                            {value}
-                        </option>
-                        );
-                    })}
+                {taskCategories.map((category) => (
+                    <option className="" value={category.category_name}>
+                    {category.category_name}
+                    </option>
+                ))}
                 </select>
 
                 <div>Choose Priority Level: </div>
