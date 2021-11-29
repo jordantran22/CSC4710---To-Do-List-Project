@@ -59,12 +59,24 @@ app.get('/tasks/week', (req, res) => {
     // });
 });
 
+app.get('/tasks/week/:date', (req, res) => {
+    
+    const date = req.params.date;
+    const db = dbService.getDbServiceInstance();
+    const result = db.getTasksDueSpecificWeek(date);
+    result.then(data => res.json(data))
+    .catch(err => console.log(err));
+    // res.json({
+    //     success: true
+    // });
+});
+
 app.get('/tasks/categories', (req, res) => {
     const db = dbService.getDbServiceInstance();
     const result = db.getTaskCategories();
     result.then(data => res.json(data))
     .catch(err => console.log(err));
-})
+});
 
 app.post('/tasks/submit', (req, res) => {
     // console.log("testing post request");

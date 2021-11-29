@@ -108,8 +108,23 @@ class DbService {
         }
     }
 
-
-
+    async getTasksDueSpecificWeek(d) {
+        const start_of_week = "SUBDATE(" + d + ", dayofweek(" + d + ") - 1)";
+        try {
+            const response = await new Promise((resolve, reject) => {
+                const query = "SELECT task_id, task_text, DATE_FORMAT(due_date, '%Y-%m-%d') AS due_date, priority_level, category_name, status FROM tasks LEFT JOIN category ON tasks.category_id = category.category_id WHERE tasks.due_date BETWEEN " + start_of_week + " AND " + start_of_week + " + INTERVAL 6 DAY ORDER BY tasks.priority_level ASC;";
+                connection.query(query, (err, results) => {
+                    if(err) reject(new Error(err.message));
+                    resolve(results);
+                });
+            })
+            
+            console.log(response);
+            return response;
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     async getTaskCategories() {
         try {
