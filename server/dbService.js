@@ -1,9 +1,11 @@
 const mysql = require('mysql');
+const credentials = require('./credentials'); // Create credenntials.json -> { "user" : "xxxxx", "password": "xxxxxx" }
 let instance = null;
 
 const connection = mysql.createConnection({
     host: "localhost",
-    user: "jordan",
+    user: credentials.user,
+    password: credentials.password,
     database: "todo",
     port: "3306",
 });
