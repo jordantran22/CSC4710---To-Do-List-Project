@@ -74,7 +74,7 @@ const ToDoContainer = () => {
         const data = await res.json();
         setTasksWeeklyReport(data);
 
-        console.log(tasksByWeekNumber);
+        console.log(tasksWeeklyReport);
     }
 
     const getTasksLateRequest = async () => {
