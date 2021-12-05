@@ -69,7 +69,7 @@ const ToDoContainer = () => {
     }
 
     const getTasksByWeekNumber = async (weekdate) => {
-        const res = await fetch(`http://localhost:5000/tasks/week/:${weekdate}`);
+        const res = await fetch(`http://localhost:5000/tasks/week/"${weekdate}"`);
         console.log(res);
         const data = await res.json();
         setTasksWeeklyReport(data);
@@ -405,6 +405,7 @@ const ToDoContainer = () => {
                     <form className="form">
                         <div>Enter a date to view tasks by week:</div>
                         <input type="date" value={weekdate} onChange={((e) => setWeekdate(e.target.value))}/>
+                        <div>I'm a weekdate and my value is {weekdate}</div>
                     </form>
                     {tasksWeeklyReport.length < 1 ? <h1>No tasks here!</h1> : <h1>Weekly Report: </h1>}
                     {tasksWeeklyReport.map((task) => (
