@@ -72,9 +72,9 @@ const ToDoContainer = () => {
         const res = await fetch(`http://localhost:5000/tasks/week/"${weekdate}""`);
         console.log(res);
         const data = await res.json();
-        setTasksDueWithinWeek(data);
+        setTasksWeeklyReport(data);
 
-        console.log(tasksDueWithinWeek);
+        console.log(tasksByWeekNumber);
     }
 
     const getTasksLateRequest = async () => {
