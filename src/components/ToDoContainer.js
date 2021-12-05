@@ -16,6 +16,8 @@ const ToDoContainer = () => {
     const [tasksLate, setTasksLate] = useState([]);
     const [tasksDueTommorow, setTasksDueTommorow] = useState([]);
     const [tasksDueWithinWeek, setTasksDueWithinWeek] = useState([]);
+    const [tasksWeeklyReport, setTasksWeeklyReport] = useState([]);
+    const [weekdate, setWeekdate] = useState([]);
     const [view, setView] = useState('All');
     const [deletingCategory, setDeletingCategory] = useState(0);
     const [editCategory, setEditCategory] = useState(false);
@@ -31,6 +33,13 @@ const ToDoContainer = () => {
             console.log(e)
         }
     }, []);
+
+    const getWeekFromDate = (date) => {
+        let d = new Date(date);
+        let n = d.getDay();
+        let weekNumber = Math.ceil((d.getDate() + (6 - n)) / 7);
+        return weekNumber;
+    }
 
     const getTasksDueTodayRequest = async () => {
         const res = await fetch('http://localhost:5000/tasks/today');
@@ -52,6 +61,15 @@ const ToDoContainer = () => {
     
     const getTaskDueWithinWeek = async() => {
         const res = await fetch('http://localhost:5000/tasks/week');
+        console.log(res);
+        const data = await res.json();
+        setTasksDueWithinWeek(data);
+
+        console.log(tasksDueWithinWeek);
+    }
+
+    const getTasksByWeekNumber = async (weekdate) => {
+        const res = await fetch(`http://localhost:5000/tasks/week/"${weekdate}""`);
         console.log(res);
         const data = await res.json();
         setTasksDueWithinWeek(data);
@@ -172,6 +190,8 @@ const ToDoContainer = () => {
             getTasksDueTommorowRequest();
         } else if(currentView === 'Due In A Week') {
             getTaskDueWithinWeek();
+        } else if(currentView === 'Weekly Report') {
+            getTasksByWeekNumber(weekdate);
         }
 
         setView(currentView);
@@ -306,6 +326,7 @@ const ToDoContainer = () => {
                     <option value="Due Tommorow">Due Tommorow</option>
                     <option value="Late">Late Tasks</option>
                     <option value="Due In A Week">Due In A Week</option>
+                    <option value="Weekly Report">Weekly Report</option>
                 </select>
            </form>
 
@@ -376,6 +397,20 @@ const ToDoContainer = () => {
                     <Task task={task} deleteTask={() => deleteTaskRequest(task.task_id)} getTasks={() => getTaskDueWithinWeek()}></Task>
                     ))}
                </div> : <div></div>
+           }
+
+           {
+               view === 'Weekly Report' ?
+                <div>
+                    <form className="form">
+                        <div>Enter a date to view tasks by week:</div>
+                        <input type="date" value={weekdate} onChange={((e) => setWeekdate(e.target.value))}/>
+                    </form>
+                    {tasksWeeklyReport.length < 1 ? <h1>No tasks here!</h1> : <h1>Weekly Report: </h1>}
+                    {tasksWeeklyReport.map((task) => (
+                    <Task task={task} deleteTask={() => deleteTaskRequest(task.task_id)} getTasks={() => getTasksByWeekNumber(weekdate)}></Task>
+                    ))}
+                </div> : <div></div>
            }
           
             {/* {tasks.length < 1 ? <h1>All Tasks Completed!</h1> : 
